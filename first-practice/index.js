@@ -59,6 +59,52 @@ app.get("/getStudents", (req, res) => {
     });
 })
 
+// app.get('/user/:name', (req, res) => {
+//     let userName = req.params.name;
+//     console.log(`GET /user/:name: ${JSON.stringify(req.params)}`);
+//     user.findOne({ name: userName }, (err, data) => {
+//         if (err) return console.log(`Oops! ${err}`);
+//         console.log(`data -- ${JSON.stringify(data)}`);
+//         let returnMsg = `user name : ${userName} role : ${data.role}`;
+//         console.log(returnMsg);
+//         res.send(returnMsg);
+//     });
+// });
+
+
+//Update --find one and then update the document
+//Update --find one and then update the document
+app.post('/updateUserRole', (req, res) => {
+    console.log(`POST /updateUserRole: ${JSON.stringify(req.body)}`);
+    let matchedName = req.body.name;
+    let newrole = req.body.role;
+    user.findOneAndUpdate({ name: matchedName }, { role: newrole },
+        { new: true }, //return the updated version instead of the pre-updated document 
+        (err, data) => {
+            if (err) return console.log(`Oops! ${err}`);
+            console.log(`data -- ${data.role}`)
+            let returnMsg = `username : ${matchedName} New role : ${data.role}`;
+            console.log(returnMsg);
+            res.send(returnMsg);
+        });
+})
+
+//Delete --find one and then remove the document
+app.post('/removeUser', (req, res) => {
+    console.log(`POST /removeUser: ${JSON.stringify(req.body)}`);
+    let matchedName = req.body.name;
+    user.findOneAndDelete(
+        { name: matchedName },
+        (err, data) => {
+            if (err) return console.log(`Oops! ${err}`);
+            console.log(`data -- ${JSON.stringify(data)}`)
+            let returnMsg = `user name : ${matchedName}, removed data : ${data}`;
+            console.log(returnMsg);
+            res.send(returnMsg);
+        });
+});
+
+
 
 
 
